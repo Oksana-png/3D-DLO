@@ -56,7 +56,7 @@ function inputText() {
 // дебаунсинг, есть еще троттлинг
 function debounce(f, t) {
   return function () {
-    let previousCall = this.lastCall;
+    const previousCall = this.lastCall;
     this.lastCall = Date.now();
     if (previousCall && this.lastCall - previousCall <= t) {
       clearTimeout(this.lastCallTimer);
@@ -66,3 +66,41 @@ function debounce(f, t) {
 }
 
 input.addEventListener("input", debounce(inputText, 300));
+// ВТОРОЕ ЗАДАНИЕ, АНИМАЦИя
+const buttonStart = document.querySelector(".button");
+const airplane = document.querySelector(".svg-air");
+const jumping = document.querySelector(".svg");
+
+let animate = false;
+
+buttonStart.addEventListener("click", () => {
+  if (!animate) {
+    flyInterval = requestAnimationFrame(flyAnimate);
+    animate = true;
+  } else {
+    animate = false;
+    cancelAnimationFrame(flyInterval);
+  }
+});
+
+let flyInterval,
+  count = 0;
+console.log();
+function flyAnimate() {
+  flyInterval = requestAnimationFrame(flyAnimate);
+  count++;
+  if (count < 90) {
+    airplane.style.left = count + "px";
+    jumping.style.top = count + "px";
+    airplane.style.transform = `rotate(${count / 2}deg)`;
+    jumping.style.transform = `rotate(${count}deg)`;
+  } else if (count < 380) {
+    airplane.style.left = count + "px";
+    jumping.style.top = count + "px";
+    jumping.style.transform = `rotate(${count}deg)`;
+  } else if (count < window.screen.availWidth - 150) {
+    airplane.style.left = count + "px";
+  } else {
+    cancelAnimationFrame(flyInterval);
+  }
+}
