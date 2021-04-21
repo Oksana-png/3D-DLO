@@ -1,0 +1,14 @@
+.svg {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.svg-air {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+.button {
+  margin-bottom: 30px;
+}
