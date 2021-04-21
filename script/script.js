@@ -68,6 +68,7 @@ function debounce(f, t) {
 input.addEventListener("input", debounce(inputText, 300));
 // ВТОРОЕ ЗАДАНИЕ, АНИМАЦИя
 const buttonStart = document.querySelector(".button");
+const buttonReset = document.querySelector(".button-reset");
 const airplane = document.querySelector(".svg-air");
 const jumping = document.querySelector(".svg");
 
@@ -104,3 +105,11 @@ function flyAnimate() {
     cancelAnimationFrame(flyInterval);
   }
 }
+
+buttonReset.addEventListener("click", () => {
+  airplane.style.left = "0px";
+  jumping.style.top = "0px";
+  airplane.style.transform = `rotate(0deg)`;
+  jumping.style.transform = `rotate(0deg)`;
+  count = 0;
+});
