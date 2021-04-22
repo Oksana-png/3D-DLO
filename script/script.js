@@ -42,7 +42,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     updateClock();
   }
-  countTimer("22 april 2021");
+  countTimer("29 april 2021");
 
   // открытие и закрытию меню
   const btnMenu = document.querySelector(".menu"),
@@ -115,6 +115,21 @@ window.addEventListener("DOMContentLoaded", () => {
       popup.style.display = "none";
     });
   };
-
   togglePopUp();
+
+  // прокрутка страницы плавно (на все ссылки с классом scroll)
+  {
+    const blockLinks = document.querySelectorAll("a.scroll");
+
+    blockLinks.forEach((elem) => {
+      elem.addEventListener("click", (event) => {
+        event.preventDefault();
+        const id = elem.getAttribute("href");
+        document.querySelector(id).scrollIntoView({
+          behavior: "smooth",
+          blocks: "start",
+        });
+      });
+    });
+  }
 });
