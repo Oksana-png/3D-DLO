@@ -112,4 +112,6 @@ buttonReset.addEventListener("click", () => {
   airplane.style.transform = `rotate(0deg)`;
   jumping.style.transform = `rotate(0deg)`;
   count = 0;
+  animate = false;
+  cancelAnimationFrame(flyInterval);
 });
