@@ -42,6 +42,79 @@ window.addEventListener("DOMContentLoaded", () => {
 
     updateClock();
   }
-
   countTimer("22 april 2021");
+
+  // открытие и закрытию меню
+  const btnMenu = document.querySelector(".menu"),
+    closeMenu = document.querySelector(".close-btn"),
+    menu = document.querySelector("menu"),
+    itemMenu = menu.querySelectorAll("ul>li");
+
+  const handlerMenu = () => {
+    if (document.documentElement.clientWidth <= 768) {
+      menu.style.transform = `translate(50%)`;
+      return;
+    }
+    // menu.classList.toggle("active-menu");
+    // анимация появления
+    const animationMenu = requestAnimationFrame(anim);
+
+    function anim() {
+      let count = -100;
+      const timerMenu = setInterval(() => {
+        if (count < 50) {
+          count += 2;
+          menu.style.transform = `translate(${count}%)`;
+        } else {
+          clearInterval(timerMenu);
+          cancelAnimationFrame(animationMenu);
+        }
+      }, 10);
+    }
+  };
+  const close = () => {
+    if (document.documentElement.clientWidth <= 768) {
+      menu.style.transform = `translate(-100%)`;
+      return;
+    }
+    // анимация закрывания
+    const animationMenu = requestAnimationFrame(anim);
+
+    function anim() {
+      let count = 50;
+      const timerMenu = setInterval(() => {
+        if (count > -100) {
+          count -= 2;
+          menu.style.transform = `translate(${count}%)`;
+        } else {
+          clearInterval(timerMenu);
+          cancelAnimationFrame(animationMenu);
+        }
+      }, 10);
+    }
+  };
+
+  btnMenu.addEventListener("click", handlerMenu);
+  closeMenu.addEventListener("click", close);
+  itemMenu.forEach((elem) => elem.addEventListener("click", close));
+
+  // POPUP окно
+
+  const togglePopUp = () => {
+    const popup = document.querySelector(".popup"),
+      popupBtn = document.querySelectorAll(".popup-btn"),
+      closePopup = document.querySelector(".popup-close");
+
+    popupBtn.forEach((item) => {
+      item.addEventListener("click", () => {
+        popup.style.display = "block";
+      });
+    });
+
+    closePopup.addEventListener("click", () => {
+      popup.style.display = "none";
+    });
+  };
+
+  togglePopUp();
 });
