@@ -44,7 +44,7 @@ function getDate(deadline) {
       return "Добрый день";
     } else if (hours > 18 && hours <= 22) {
       return "Добрый вечер";
-    } else if (hours > 22 && hours < 5) {
+    } else if ((hours > 22) || (hours >= 0 && hours < 5) {
       return "Доброй ночи";
     }
   }
