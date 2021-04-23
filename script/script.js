@@ -45,69 +45,72 @@ window.addEventListener("DOMContentLoaded", () => {
   countTimer("29 april 2021");
 
   // открытие и закрытию меню
-  const //btnMenu = document.querySelector(".menu"),
-    menu = document.querySelector("menu"),
-    header = document.querySelector("header");
+  const toggleMenu = () => {
+    const menu = document.querySelector("menu"),
+      header = document.querySelector("header");
 
-  const handlerMenu = () => {
-    if (document.documentElement.clientWidth <= 768) {
-      menu.style.transform = `translate(50%)`;
-      return;
-    }
-    // menu.classList.toggle("active-menu");
-    // анимация появления
-    const animationMenu = requestAnimationFrame(anim);
-    function anim() {
-      let count = -100;
-      const timerMenu = setInterval(() => {
-        if (count < 100) {
-          count += 2;
-          menu.style.transform = `translate(${count}%)`;
-        } else {
-          clearInterval(timerMenu);
-          cancelAnimationFrame(animationMenu);
-        }
-      }, 10);
-    }
+    const handlerMenu = () => {
+      if (document.documentElement.clientWidth <= 768) {
+        menu.style.transform = `translate(50%)`;
+        return;
+      }
+      // menu.classList.toggle("active-menu");
+      // анимация появления
+      const animationMenu = requestAnimationFrame(anim);
+      function anim() {
+        let count = -100;
+        const timerMenu = setInterval(() => {
+          if (count < 100) {
+            count += 2;
+            menu.style.transform = `translate(${count}%)`;
+          } else {
+            clearInterval(timerMenu);
+            cancelAnimationFrame(animationMenu);
+          }
+        }, 10);
+      }
+    };
+    const close = () => {
+      if (document.documentElement.clientWidth <= 768) {
+        menu.style.transform = `translate(-100%)`;
+        return;
+      }
+      // анимация закрывания
+      const animationMenu = requestAnimationFrame(anim);
+      function anim() {
+        let count = 100;
+        const timerMenu = setInterval(() => {
+          if (count > -100) {
+            count -= 2;
+            menu.style.transform = `translate(${count}%)`;
+          } else {
+            clearInterval(timerMenu);
+            cancelAnimationFrame(animationMenu);
+          }
+        }, 10);
+      }
+    };
+    // делегирование на закрытие меню
+    menu.addEventListener("click", (event) => {
+      const target = event.target;
+      console.log(target.classList);
+      if (
+        target.classList.contains("scroll") ||
+        target.classList.contains("close-btn")
+      ) {
+        close();
+      }
+    });
+    // делегирование на открытие меню
+    header.addEventListener("click", (event) => {
+      const target = event.target;
+      if (target.closest(".menu")) {
+        handlerMenu();
+      }
+    });
   };
-  const close = () => {
-    if (document.documentElement.clientWidth <= 768) {
-      menu.style.transform = `translate(-100%)`;
-      return;
-    }
-    // анимация закрывания
-    const animationMenu = requestAnimationFrame(anim);
-    function anim() {
-      let count = 100;
-      const timerMenu = setInterval(() => {
-        if (count > -100) {
-          count -= 2;
-          menu.style.transform = `translate(${count}%)`;
-        } else {
-          clearInterval(timerMenu);
-          cancelAnimationFrame(animationMenu);
-        }
-      }, 10);
-    }
-  };
-  // делегирование на закрытие меню
-  menu.addEventListener("click", (event) => {
-    const target = event.target;
-    console.log(target.classList);
-    if (
-      target.classList.contains("scroll") ||
-      target.classList.contains("close-btn")
-    ) {
-      close();
-    }
-  });
-  // делегирование на открытие меню
-  header.addEventListener("click", (event) => {
-    const target = event.target;
-    if (target.closest(".menu")) {
-      handlerMenu();
-    }
-  });
+
+  toggleMenu();
 
   // POPUP окно
 
