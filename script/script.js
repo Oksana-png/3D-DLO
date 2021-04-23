@@ -45,10 +45,9 @@ window.addEventListener("DOMContentLoaded", () => {
   countTimer("29 april 2021");
 
   // открытие и закрытию меню
-  const btnMenu = document.querySelector(".menu"),
-    closeMenu = document.querySelector(".close-btn"),
+  const //btnMenu = document.querySelector(".menu"),
     menu = document.querySelector("menu"),
-    itemMenu = menu.querySelectorAll("ul>li");
+    header = document.querySelector("header");
 
   const handlerMenu = () => {
     if (document.documentElement.clientWidth <= 768) {
@@ -58,7 +57,6 @@ window.addEventListener("DOMContentLoaded", () => {
     // menu.classList.toggle("active-menu");
     // анимация появления
     const animationMenu = requestAnimationFrame(anim);
-
     function anim() {
       let count = -100;
       const timerMenu = setInterval(() => {
@@ -79,7 +77,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     // анимация закрывания
     const animationMenu = requestAnimationFrame(anim);
-
     function anim() {
       let count = 100;
       const timerMenu = setInterval(() => {
@@ -93,10 +90,24 @@ window.addEventListener("DOMContentLoaded", () => {
       }, 10);
     }
   };
-
-  btnMenu.addEventListener("click", handlerMenu);
-  closeMenu.addEventListener("click", close);
-  itemMenu.forEach((elem) => elem.addEventListener("click", close));
+  // делегирование на закрытие меню
+  menu.addEventListener("click", (event) => {
+    const target = event.target;
+    console.log(target.classList);
+    if (
+      target.classList.contains("scroll") ||
+      target.classList.contains("close-btn")
+    ) {
+      close();
+    }
+  });
+  // делегирование на открытие меню
+  header.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target.closest(".menu")) {
+      handlerMenu();
+    }
+  });
 
   // POPUP окно
 
@@ -147,4 +158,38 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+  // табы
+
+  const tabs = () => {
+    const tabHeader = document.querySelector(".service-header"),
+      tab = document.querySelectorAll(".service-header-tab"),
+      tabContent = document.querySelectorAll(".service-tab");
+
+    const toggleTabContent = (index) => {
+      for (let i = 0; i < tabContent.length; i++) {
+        if (index === i) {
+          tabContent[i].classList.remove("d-none");
+          tab[i].classList.add("active");
+        } else {
+          tabContent[i].classList.add("d-none");
+          tab[i].classList.remove("active");
+        }
+      }
+    };
+
+    tabHeader.addEventListener("click", (event) => {
+      let target = event.target;
+      target = target.closest(".service-header-tab"); // метод поднимается вверх. если не находит - возвращает null
+
+      if (target) {
+        tab.forEach((item, i) => {
+          if (item === target) {
+            toggleTabContent(i);
+          }
+        });
+      }
+    });
+  };
+  tabs();
 });
