@@ -62,7 +62,7 @@ window.addEventListener("DOMContentLoaded", () => {
     function anim() {
       let count = -100;
       const timerMenu = setInterval(() => {
-        if (count < 50) {
+        if (count < 100) {
           count += 2;
           menu.style.transform = `translate(${count}%)`;
         } else {
@@ -81,7 +81,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const animationMenu = requestAnimationFrame(anim);
 
     function anim() {
-      let count = 50;
+      let count = 100;
       const timerMenu = setInterval(() => {
         if (count > -100) {
           count -= 2;
@@ -108,11 +108,26 @@ window.addEventListener("DOMContentLoaded", () => {
     popupBtn.forEach((item) => {
       item.addEventListener("click", () => {
         popup.style.display = "block";
+
+        const animationPopup = requestAnimationFrame(anim);
+        function anim() {
+          let count = 0;
+          const timerPopup = setInterval(() => {
+            if (count < 100) {
+              count += 6;
+              popup.style.opacity = `${count * 0.01}`;
+            } else {
+              clearInterval(timerPopup);
+              cancelAnimationFrame(animationPopup);
+            }
+          }, 30);
+        }
       });
     });
 
     closePopup.addEventListener("click", () => {
       popup.style.display = "none";
+      popup.style.opacity = 0;
     });
   };
   togglePopUp();
