@@ -46,12 +46,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // открытие и закрытию меню
   const toggleMenu = () => {
-    const menu = document.querySelector("menu"),
-      header = document.querySelector("header");
+    const menu = document.querySelector("menu");
 
     const handlerMenu = () => {
       if (document.documentElement.clientWidth <= 768) {
-        menu.style.transform = `translate(50%)`;
+        menu.style.transform = `translate(0)`;
         return;
       }
       // menu.classList.toggle("active-menu");
@@ -60,7 +59,7 @@ window.addEventListener("DOMContentLoaded", () => {
       function anim() {
         let count = -100;
         const timerMenu = setInterval(() => {
-          if (count < 100) {
+          if (count < 0) {
             count += 2;
             menu.style.transform = `translate(${count}%)`;
           } else {
@@ -78,7 +77,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // анимация закрывания
       const animationMenu = requestAnimationFrame(anim);
       function anim() {
-        let count = 100;
+        let count = 0;
         const timerMenu = setInterval(() => {
           if (count > -100) {
             count -= 2;
@@ -90,22 +89,28 @@ window.addEventListener("DOMContentLoaded", () => {
         }, 10);
       }
     };
-    // делегирование на закрытие меню
-    menu.addEventListener("click", (event) => {
+    // делегирование на закрытие и отрытие меню
+    document.addEventListener("click", (event) => {
       const target = event.target;
-      console.log(target.classList);
+
+      if (target.closest(".menu")) {
+        if (menu.style.transform === "translate(0%)") {
+          close();
+        } else {
+          handlerMenu();
+        }
+      }
       if (
         target.classList.contains("scroll") ||
         target.classList.contains("close-btn")
       ) {
         close();
       }
-    });
-    // делегирование на открытие меню
-    header.addEventListener("click", (event) => {
-      const target = event.target;
-      if (target.closest(".menu")) {
-        handlerMenu();
+      // клик мимо меню (закрытие)
+      if (menu.style.transform === "translate(0%)") {
+        if (!(target.tagName === "MENU")) {
+          close();
+        }
       }
     });
   };
@@ -142,6 +147,14 @@ window.addEventListener("DOMContentLoaded", () => {
     closePopup.addEventListener("click", () => {
       popup.style.display = "none";
       popup.style.opacity = 0;
+    });
+
+    popup.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!target.closest(".popup-content")) {
+        popup.style.display = "none";
+        popup.style.opacity = 0;
+      }
     });
   };
   togglePopUp();
