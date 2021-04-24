@@ -108,7 +108,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
       // клик мимо меню (закрытие)
       if (menu.style.transform === "translate(0%)") {
-        if (!(target.tagName === "MENU")) {
+        if (target.tagName !== "MENU") {
           close();
         }
       }
@@ -130,6 +130,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
         const animationPopup = requestAnimationFrame(anim);
         function anim() {
+          if (document.documentElement.clientWidth <= 768) {
+            popup.style.opacity = `1`;
+            cancelAnimationFrame(animationPopup);
+            return;
+          }
           let count = 0;
           const timerPopup = setInterval(() => {
             if (count < 100) {
