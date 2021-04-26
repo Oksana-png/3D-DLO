@@ -94,7 +94,10 @@ window.addEventListener("DOMContentLoaded", () => {
       const target = event.target;
 
       if (target.closest(".menu")) {
-        if (menu.style.transform === "translate(0%)") {
+        if (
+          menu.style.transform === "translate(0%)" ||
+          menu.style.transform === "translate(0px)"
+        ) {
           close();
         } else {
           handlerMenu();
