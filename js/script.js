@@ -39,7 +39,14 @@ class ToDo {
       }
     });
   }
-  editTodo(key) {}
+  editTodo(key) {
+    this.todoData.forEach((item) => {
+      // используя contenteditable
+      // if (item.key === key) {
+      //   this.input.value = item.value;
+      // }
+    });
+  }
 
   addToStorage() {
     localStorage.setItem("todoList", JSON.stringify([...this.todoData]));
