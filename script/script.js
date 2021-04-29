@@ -347,7 +347,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const regular = () => {
     const calcInputs = document.querySelectorAll("input.calc-item"),
-      footerFormTop = document.querySelectorAll(".top-form");
+      footerFormTop = document.querySelectorAll(".top-form"),
+      inputMessage = document.getElementById("form2-message");
     const regNumder = /[^0-9]/g,
       regText = /[^а-я\s\-]/gi,
       regEmail = /[^@\-_\!\*\'~\.a-z]/gi,
@@ -357,18 +358,19 @@ window.addEventListener("DOMContentLoaded", () => {
       regDef = /-{2,}/g;
 
     calcInputs.forEach((item) => {
-      item.addEventListener("blur", (event) => {
+      item.addEventListener("blur", () => {
         item.value = item.value.replace(regNumder, "");
       });
     });
 
-    const setFormRegular = (event) => {
-      const target = event.target;
-      if (target.closest("#form2-message")) {
-        target.value = target.value.replace(regText, "");
-      }
-    };
-    // footerForm.addEventListener("input", setFormRegular);
+    inputMessage.addEventListener("blur", () => {
+      inputMessage.value = inputMessage.value.replace(regText, "");
+      inputMessage.value = inputMessage.value.replace(regSpace, " ");
+      inputMessage.value = inputMessage.value.replace(regDef, "-");
+      inputMessage.value = inputMessage.value.trim();
+      inputMessage.value = inputMessage.value.replace(regStart, "");
+    });
+
     footerFormTop.forEach((item) => {
       item.addEventListener("blur", (event) => {
         const target = event.target;
@@ -399,4 +401,47 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
   regular();
+
+  // КАЛЬКУЛЯТОР СТОИМОСТИ
+  const calc = (price = 100) => {
+    const calcBlock = document.querySelector(".calc-block"),
+      calcType = document.querySelector(".calc-type"),
+      calcSquare = document.querySelector(".calc-square"),
+      calcCount = document.querySelector(".calc-count"),
+      calcDay = document.querySelector(".calc-day"),
+      totalValue = document.getElementById("total");
+
+    const countSum = () => {
+      let total = 0,
+        countValue = 1,
+        dayValue = 1;
+      const typeValue = +calcType.options[calcType.selectedIndex].value;
+      const squareValue = +calcSquare.value;
+
+      if (calcCount.value > 1) {
+        countValue += (calcCount.value - 1) / 10;
+      }
+      if (calcDay.value && calcDay.value < 5) {
+        dayValue *= 2;
+      } else if (calcDay.value && calcDay.value < 10) {
+        dayValue *= 1.5;
+      }
+      if (typeValue && squareValue) {
+        total = +(price * typeValue * squareValue * countValue * dayValue);
+        let i = 1;
+        const timerId = setInterval(() => {
+          totalValue.textContent = i;
+          if (i === total) clearInterval(timerId);
+          i++;
+        }, 1);
+      }
+    };
+    calcBlock.addEventListener("change", (event) => {
+      const target = event.target;
+      if (target.matches("select") || target.matches("input")) {
+        countSum();
+      }
+    });
+  };
+  calc(100);
 });
