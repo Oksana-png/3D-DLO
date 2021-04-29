@@ -318,4 +318,85 @@ window.addEventListener("DOMContentLoaded", () => {
     startSlide();
   };
   slider();
+
+  // замена картинки про наведении и обратно
+  const hoverEffect = () => {
+    const photos = document.querySelectorAll(".command__photo");
+
+    const updatePhoto = (event) => {
+      const target = event.target;
+      const newUrl = target.dataset.img;
+
+      target.dataset.img = target.src;
+      target.src = newUrl;
+    };
+
+    const returnPhoto = (event) => {
+      const target = event.target;
+      const newUrl = target.dataset.img;
+
+      target.dataset.img = target.src;
+      target.src = newUrl;
+    };
+    photos.forEach((item) => {
+      item.addEventListener("mouseenter", updatePhoto);
+      item.addEventListener("mouseout", returnPhoto);
+    });
+  };
+  hoverEffect();
+
+  const regular = () => {
+    const calcInputs = document.querySelectorAll("input.calc-item"),
+      footerFormTop = document.querySelectorAll(".top-form");
+    const regNumder = /[^0-9]/g,
+      regText = /[^а-я\s\-]/gi,
+      regEmail = /[^@\-_\!\*\'~\.a-z]/gi,
+      regPhone = /[^0-9\(\)-]/g,
+      regStart = /^-|-$/g,
+      regSpace = /\s{2,}/,
+      regDef = /-{2,}/g;
+
+    calcInputs.forEach((item) => {
+      item.addEventListener("blur", (event) => {
+        item.value = item.value.replace(regNumder, "");
+      });
+    });
+
+    const setFormRegular = (event) => {
+      const target = event.target;
+      if (target.closest("#form2-message")) {
+        target.value = target.value.replace(regText, "");
+      }
+    };
+    // footerForm.addEventListener("input", setFormRegular);
+    footerFormTop.forEach((item) => {
+      item.addEventListener("blur", (event) => {
+        const target = event.target;
+        if (target.closest("#form2-name")) {
+          target.value = target.value.replace(regText, "");
+          target.value = target.value.replace(regSpace, " ");
+          target.value = target.value.replace(regDef, "-");
+          target.value = target.value.trim();
+          target.value = target.value.replace(regStart, "");
+          target.value = target.value.replace(/[^.]/gi, (match) =>
+            match.toLowerCase()
+          );
+          target.value = target.value.replace(/^.{1}/, (match) =>
+            match.toUpperCase()
+          );
+        } else if (target.closest("#form2-email")) {
+          target.value = target.value.replace(regEmail, "");
+          target.value = target.value.replace(regDef, "-");
+          target.value = target.value.trim();
+          target.value = target.value.replace(regStart, "");
+        } else if (target.closest("#form2-phone")) {
+          target.value = target.value.replace(regPhone, "");
+          target.value = target.value.replace(regDef, "-");
+          target.value = target.value.trim();
+          target.value = target.value.replace(regStart, "");
+        }
+      });
+    });
+  };
+  regular();
 });
