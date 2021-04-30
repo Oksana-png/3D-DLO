@@ -427,7 +427,9 @@ window.addEventListener("DOMContentLoaded", () => {
         dayValue *= 1.5;
       }
       if (typeValue && squareValue) {
-        total = Math.floor(price * typeValue * squareValue * countValue * dayValue);
+        total = Math.floor(
+          price * typeValue * squareValue * countValue * dayValue
+        );
         let i = 1;
         const timerId = setInterval(() => {
           totalValue.textContent = i;
@@ -438,6 +440,10 @@ window.addEventListener("DOMContentLoaded", () => {
             clearInterval(timerId);
           }
         }, 1);
+      } else {
+        calcDay.value = "";
+        calcCount.value = "";
+        totalValue.textContent = 0;
       }
     };
     calcBlock.addEventListener("change", (event) => {
