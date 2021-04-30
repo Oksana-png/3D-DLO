@@ -325,18 +325,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const updatePhoto = (event) => {
       const target = event.target;
-      const newUrl = target.dataset.img;
-
-      target.dataset.img = target.src;
-      target.src = newUrl;
+      [target.dataset.img, target.src] = [target.src, target.dataset.img];
     };
 
     const returnPhoto = (event) => {
       const target = event.target;
-      const newUrl = target.dataset.img;
-
-      target.dataset.img = target.src;
-      target.src = newUrl;
+      // Значения перезаписываются
+      [target.dataset.img, target.src] = [target.src, target.dataset.img];
     };
     photos.forEach((item) => {
       item.addEventListener("mouseenter", updatePhoto);
@@ -345,62 +340,62 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   hoverEffect();
 
-  const regular = () => {
-    const calcInputs = document.querySelectorAll("input.calc-item"),
-      footerFormTop = document.querySelectorAll(".top-form"),
-      inputMessage = document.getElementById("form2-message");
-    const regNumder = /[^0-9]/g,
-      regText = /[^а-я\s\-]/gi,
-      regEmail = /[^@\-_\!\*\'~\.a-z]/gi,
-      regPhone = /[^0-9\(\)-]/g,
-      regStart = /^-|-$/g,
-      regSpace = /\s{2,}/,
-      regDef = /-{2,}/g;
+  // const regular = () => {
+  //   const calcInputs = document.querySelectorAll("input.calc-item"),
+  //     footerFormTop = document.querySelectorAll(".top-form"),
+  //     inputMessage = document.getElementById("form2-message");
+  //   const regNumder = /[^0-9]/g,
+  //     regText = /[^а-я\s\-]/gi,
+  //     regEmail = /[^@\-_\!\*\'~\.a-z]/gi,
+  //     regPhone = /[^0-9\(\)-]/g,
+  //     regStart = /^-|-$/g,
+  //     regSpace = /\s{2,}/,
+  //     regDef = /-{2,}/g;
 
-    calcInputs.forEach((item) => {
-      item.addEventListener("blur", () => {
-        item.value = item.value.replace(regNumder, "");
-      });
-    });
+  //   calcInputs.forEach((item) => {
+  //     item.addEventListener("blur", () => {
+  //       item.value = item.value.replace(regNumder, "");
+  //     });
+  //   });
 
-    inputMessage.addEventListener("blur", () => {
-      inputMessage.value = inputMessage.value.replace(regText, "");
-      inputMessage.value = inputMessage.value.replace(regSpace, " ");
-      inputMessage.value = inputMessage.value.replace(regDef, "-");
-      inputMessage.value = inputMessage.value.trim();
-      inputMessage.value = inputMessage.value.replace(regStart, "");
-    });
+  //   inputMessage.addEventListener("blur", () => {
+  //     inputMessage.value = inputMessage.value.replace(regText, "");
+  //     inputMessage.value = inputMessage.value.replace(regSpace, " ");
+  //     inputMessage.value = inputMessage.value.replace(regDef, "-");
+  //     inputMessage.value = inputMessage.value.trim();
+  //     inputMessage.value = inputMessage.value.replace(regStart, "");
+  //   });
 
-    footerFormTop.forEach((item) => {
-      item.addEventListener("blur", (event) => {
-        const target = event.target;
-        if (target.closest("#form2-name")) {
-          target.value = target.value.replace(regText, "");
-          target.value = target.value.replace(regSpace, " ");
-          target.value = target.value.replace(regDef, "-");
-          target.value = target.value.trim();
-          target.value = target.value.replace(regStart, "");
-          target.value = target.value.replace(/[^.]/gi, (match) =>
-            match.toLowerCase()
-          );
-          target.value = target.value.replace(/^.{1}/, (match) =>
-            match.toUpperCase()
-          );
-        } else if (target.closest("#form2-email")) {
-          target.value = target.value.replace(regEmail, "");
-          target.value = target.value.replace(regDef, "-");
-          target.value = target.value.trim();
-          target.value = target.value.replace(regStart, "");
-        } else if (target.closest("#form2-phone")) {
-          target.value = target.value.replace(regPhone, "");
-          target.value = target.value.replace(regDef, "-");
-          target.value = target.value.trim();
-          target.value = target.value.replace(regStart, "");
-        }
-      });
-    });
-  };
-  regular();
+  //   footerFormTop.forEach((item) => {
+  //     item.addEventListener("blur", (event) => {
+  //       const target = event.target;
+  //       if (target.closest("#form2-name")) {
+  //         target.value = target.value.replace(regText, "");
+  //         target.value = target.value.replace(regSpace, " ");
+  //         target.value = target.value.replace(regDef, "-");
+  //         target.value = target.value.trim();
+  //         target.value = target.value.replace(regStart, "");
+  //         target.value = target.value.replace(/[^.]/gi, (match) =>
+  //           match.toLowerCase()
+  //         );
+  //         target.value = target.value.replace(/^.{1}/, (match) =>
+  //           match.toUpperCase()
+  //         );
+  //       } else if (target.closest("#form2-email")) {
+  //         target.value = target.value.replace(regEmail, "");
+  //         target.value = target.value.replace(regDef, "-");
+  //         target.value = target.value.trim();
+  //         target.value = target.value.replace(regStart, "");
+  //       } else if (target.closest("#form2-phone")) {
+  //         target.value = target.value.replace(regPhone, "");
+  //         target.value = target.value.replace(regDef, "-");
+  //         target.value = target.value.trim();
+  //         target.value = target.value.replace(regStart, "");
+  //       }
+  //     });
+  //   });
+  // };
+  // regular();
 
   // КАЛЬКУЛЯТОР СТОИМОСТИ
   const calc = (price = 100) => {
@@ -427,7 +422,9 @@ window.addEventListener("DOMContentLoaded", () => {
         dayValue *= 1.5;
       }
       if (typeValue && squareValue) {
-        total = Math.floor(price * typeValue * squareValue * countValue * dayValue);
+        total = Math.floor(
+          price * typeValue * squareValue * countValue * dayValue
+        );
         let i = 1;
         const timerId = setInterval(() => {
           totalValue.textContent = i;
@@ -448,4 +445,43 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
   calc(100);
+
+  // Валидация
+  const valid = new Validator({
+    selector: "#form2",
+    // pattern: {
+    //   name: /[^а-я]/gi,
+    // },
+    method: {
+      phone: [["notEmpty"], ["pattern", "phone"]],
+      email: [["notEmpty"], ["pattern", "email"]],
+      name: [["notEmpty"], ["pattern", "name"]],
+    },
+  });
+  valid.init();
+
+  const validHeader = new Validator({
+    selector: "#form1",
+    // pattern: {
+    //   name: /[^а-я]/gi,
+    // },
+    method: {
+      phone: [["notEmpty"], ["pattern", "phone"]],
+      email: [["notEmpty"], ["pattern", "email"]],
+      name: [["notEmpty"], ["pattern", "name"]],
+    },
+  });
+  validHeader.init();
+  const validPopup = new Validator({
+    selector: "#form3",
+    // pattern: {
+    //   name: /[^а-я]/gi,
+    // },
+    method: {
+      phone: [["notEmpty"], ["pattern", "phone"]],
+      email: [["notEmpty"], ["pattern", "email"]],
+      name: [["notEmpty"], ["pattern", "name"]],
+    },
+  });
+  validPopup.init();
 });
