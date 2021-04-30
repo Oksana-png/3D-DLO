@@ -23,19 +23,45 @@ class Todo {
       this.editTodo(k);
     }
   }
+  animation(key) {
+    let i = 1;
+    const li = document.querySelectorAll(".todo-item");
+    li.forEach((elemLi) => {
+      if (elemLi.key === key) {
+        elemLi.style.backgroundColor = "#71A9F7";
+        elemLi.style.Color = "#fff";
+        const anim = setInterval(() => {
+          if (i < 0) {
+            i = 0;
+            clearInterval(anim);
+          }
+          i -= 0.1;
+          elemLi.style.opacity = i;
+        }, 100);
+      }
+    });
+  }
+
   deleteItem(key) {
     this.todoData.forEach((item) => {
       if (item.key === key) {
-        this.todoData.delete(key);
-        this.render();
+        this.animation(key);
+        setTimeout(() => {
+          this.todoData.delete(key);
+          this.render();
+        }, 1000);
       }
     });
   }
   completedItem(key) {
     this.todoData.forEach((item) => {
       if (item.key === key) {
-        item.completed = !item.completed;
-        this.render();
+        console.log(item);
+        this.animation(key);
+        setTimeout(() => {
+          item.completed = !item.completed;
+          this.render();
+        }, 1000);
       }
     });
   }
