@@ -432,7 +432,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const timerId = setInterval(() => {
           totalValue.textContent = i;
           if (i < total) {
-            i += 2;
+            i += 5;
           } else {
             totalValue.textContent = total;
             clearInterval(timerId);
