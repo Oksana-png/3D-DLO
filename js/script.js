@@ -1,6 +1,6 @@
 "use strict";
 
-class ToDo {
+class Todo {
   constructor(form, input, todoList, todoCompleted, container) {
     this.form = document.querySelector(form);
     this.input = document.querySelector(input);
@@ -40,11 +40,28 @@ class ToDo {
     });
   }
   editTodo(key) {
-    this.todoData.forEach((item) => {
-      // используя contenteditable
-      // if (item.key === key) {
-      //   this.input.value = item.value;
-      // }
+    const li = document.querySelectorAll(".todo-item");
+    li.forEach((elemLi) => {
+      if (elemLi.key === key) {
+        let complet = "";
+        this.todoData.forEach((item) => {
+          if (item.key === key) {
+            complet = item.completed;
+          }
+        });
+        if (elemLi.contentEditable && elemLi.contentEditable !== "inherit") {
+          elemLi.contentEditable = false;
+          const updateTodo = {
+            value: elemLi.textContent,
+            completed: complet,
+            key: elemLi.key,
+          };
+          this.todoData.set(updateTodo.key, updateTodo);
+          this.render();
+        } else {
+          elemLi.contentEditable = true;
+        }
+      }
     });
   }
 
@@ -110,7 +127,7 @@ class ToDo {
   }
 }
 
-const toDo = new ToDo(
+const toDo = new Todo(
   ".todo-control",
   ".header-input",
   ".todo-list",
