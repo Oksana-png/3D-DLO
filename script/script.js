@@ -476,16 +476,14 @@ window.addEventListener("DOMContentLoaded", () => {
   // ОТПРАВКА ФОРМ send-ajax-form
 
   const sendForm = () => {
-    const errorMessage = "Что-то пошло не так...",
-      loadMessage = "Загрузка...",
-      successMessage = "Спасибо! Мы скоро с вами свяжемся!";
-
     const form = document.getElementById("form1"),
       form2 = document.getElementById("form2"),
       form3 = document.getElementById("form3");
-    const statusMessage = document.createElement("div");
-    statusMessage.style.cssText = "font-size: 2rem;";
-
+    const successMessage = document.createElement("div");
+    successMessage.classList.add("success-modal");
+    successMessage.innerHTML = `
+      <h3 class="header-success">Спасибо! Ваша заявка отправлена!</h3>
+    `;
     const loader = document.createElement("div");
     loader.classList.add("overlay-loader");
     loader.innerHTML = `
@@ -508,11 +506,12 @@ window.addEventListener("DOMContentLoaded", () => {
       postData(
         body,
         () => {
-          form.querySelector(".overlay-loader").remove();
+          document.querySelector(".overlay-loader").remove();
+          form.append(successMessage);
         },
         (error) => {
           console.error(error);
-          form.querySelector(".overlay-loader").remove();
+          document.querySelector(".overlay-loader").remove();
         }
       );
     };
@@ -528,8 +527,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
     form2.addEventListener("submit", (event) => {
       event.preventDefault();
-      form2.append(loader);
-      statusMessage.textContent = loadMessage;
+      document.querySelector(".connect").after(loader);
       const formData = new FormData(form2); // для записи нужен обязательно атрибут name - он будет являться ключем
       g(formData, form2);
       document.querySelectorAll("#form2 input").forEach((item) => {
@@ -537,10 +535,8 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
     form3.addEventListener("submit", (event) => {
-      statusMessage.style.cssText = "font-size: 2rem; color: #fff;";
       event.preventDefault();
       form3.append(loader);
-      statusMessage.textContent = loadMessage;
       const formData = new FormData(form3); // для записи нужен обязательно атрибут name - он будет являться ключем
       g(formData, form3);
       document.querySelectorAll("#form3 input").forEach((item) => {
