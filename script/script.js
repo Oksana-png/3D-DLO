@@ -486,7 +486,21 @@ window.addEventListener("DOMContentLoaded", () => {
     const statusMessage = document.createElement("div");
     statusMessage.style.cssText = "font-size: 2rem;";
 
-    const g = (data) => {
+    const loader = document.createElement("div");
+    loader.classList.add("overlay-loader");
+    loader.innerHTML = `
+      <div class="loader">
+        <div class="colu col_1"></div>
+        <div class="colu col_2"></div>
+        <div class="colu col_3"></div>
+        <div class="colu col_4"></div>
+        <div class="colu col_5"></div>
+        <div class="colu col_6"></div>
+        <div class="colu col_7"></div>
+        <div class="colu col_8"></div>
+      </div>
+    `;
+    const g = (data, form) => {
       const body = {};
       data.forEach((val, i) => {
         body[i] = val;
@@ -494,31 +508,30 @@ window.addEventListener("DOMContentLoaded", () => {
       postData(
         body,
         () => {
-          statusMessage.textContent = successMessage;
+          form.querySelector(".overlay-loader").remove();
         },
         (error) => {
-          statusMessage.textContent = errorMessage;
           console.error(error);
+          form.querySelector(".overlay-loader").remove();
         }
       );
     };
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      form.append(statusMessage);
-      statusMessage.textContent = loadMessage;
+      form.append(loader);
       const formData = new FormData(form); // для записи нужен обязательно атрибут name - он будет являться ключем
-      g(formData);
+      g(formData, form);
       document.querySelectorAll("#form1 input").forEach((item) => {
         item.value = "";
       });
     });
     form2.addEventListener("submit", (event) => {
       event.preventDefault();
-      form2.append(statusMessage);
+      form2.append(loader);
       statusMessage.textContent = loadMessage;
       const formData = new FormData(form2); // для записи нужен обязательно атрибут name - он будет являться ключем
-      g(formData);
+      g(formData, form2);
       document.querySelectorAll("#form2 input").forEach((item) => {
         item.value = "";
       });
@@ -526,10 +539,10 @@ window.addEventListener("DOMContentLoaded", () => {
     form3.addEventListener("submit", (event) => {
       statusMessage.style.cssText = "font-size: 2rem; color: #fff;";
       event.preventDefault();
-      form3.append(statusMessage);
+      form3.append(loader);
       statusMessage.textContent = loadMessage;
       const formData = new FormData(form3); // для записи нужен обязательно атрибут name - он будет являться ключем
-      g(formData);
+      g(formData, form3);
       document.querySelectorAll("#form3 input").forEach((item) => {
         item.value = "";
       });
