@@ -348,15 +348,30 @@ window.addEventListener("DOMContentLoaded", () => {
   const regular = () => {
     const calcInputs = document.querySelectorAll("input.calc-item"),
       footerFormTop = document.querySelectorAll(".top-form"),
-      inputMessage = document.getElementById("form2-message");
+      inputMessage = document.getElementById("form2-message"),
+      inputTel = document.querySelectorAll('input[type="tel"]'),
+      inputName = document.querySelectorAll('input[name="user_name"]');
     const regNumder = /[^0-9]/g,
-      regText = /[^а-я\s\-]/gi,
+      regText = /[^а-я\s]/gi,
       regEmail = /[^@\-_\!\*\'~\.a-z]/gi,
       regPhone = /[^0-9\(\)-]/g,
       regStart = /^-|-$/g,
       regSpace = /\s{2,}/,
       regDef = /-{2,}/g;
 
+    inputTel.forEach((item) => {
+      item.addEventListener("input", () => {
+        item.value = item.value.replace(/[^0-9\+]/gi, "");
+      });
+    });
+    inputName.forEach((item) => {
+      item.addEventListener("blur", () => {
+        item.value = item.value.replace(/[^а-я ]/i, "");
+      });
+      item.addEventListener("input", () => {
+        item.value = item.value.replace(/[^а-я ]/i, "");
+      });
+    });
     calcInputs.forEach((item) => {
       item.addEventListener("blur", () => {
         item.value = item.value.replace(regNumder, "");
@@ -364,11 +379,16 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     inputMessage.addEventListener("blur", () => {
-      inputMessage.value = inputMessage.value.replace(regText, "");
       inputMessage.value = inputMessage.value.replace(regSpace, " ");
       inputMessage.value = inputMessage.value.replace(regDef, "-");
       inputMessage.value = inputMessage.value.trim();
       inputMessage.value = inputMessage.value.replace(regStart, "");
+    });
+    inputMessage.addEventListener("input", () => {
+      inputMessage.value = inputMessage.value.replace(
+        /[^0-9а-я \.,:\?\!;-]/gi,
+        ""
+      );
     });
 
     footerFormTop.forEach((item) => {
@@ -377,9 +397,7 @@ window.addEventListener("DOMContentLoaded", () => {
         if (target.closest("#form2-name")) {
           target.value = target.value.replace(regText, "");
           target.value = target.value.replace(regSpace, " ");
-          target.value = target.value.replace(regDef, "-");
           target.value = target.value.trim();
-          target.value = target.value.replace(regStart, "");
           target.value = target.value.replace(/[^.]/gi, (match) =>
             match.toLowerCase()
           );
@@ -454,4 +472,85 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
   calc(100);
+
+  // ОТПРАВКА ФОРМ send-ajax-form
+
+  const sendForm = () => {
+    const errorMessage = "Что-то пошло не так...",
+      loadMessage = "Загрузка...",
+      successMessage = "Спасибо! Мы скоро с вами свяжемся!";
+
+    const form = document.getElementById("form1"),
+      form2 = document.getElementById("form2"),
+      form3 = document.getElementById("form3");
+    const statusMessage = document.createElement("div");
+    statusMessage.style.cssText = "font-size: 2rem;";
+
+    const g = (data) => {
+      const body = {};
+      data.forEach((val, i) => {
+        body[i] = val;
+      });
+      postData(
+        body,
+        () => {
+          statusMessage.textContent = successMessage;
+        },
+        (error) => {
+          statusMessage.textContent = errorMessage;
+          console.error(error);
+        }
+      );
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      form.append(statusMessage);
+      statusMessage.textContent = loadMessage;
+      const formData = new FormData(form); // для записи нужен обязательно атрибут name - он будет являться ключем
+      g(formData);
+      document.querySelectorAll("#form1 input").forEach((item) => {
+        item.value = "";
+      });
+    });
+    form2.addEventListener("submit", (event) => {
+      event.preventDefault();
+      form2.append(statusMessage);
+      statusMessage.textContent = loadMessage;
+      const formData = new FormData(form2); // для записи нужен обязательно атрибут name - он будет являться ключем
+      g(formData);
+      document.querySelectorAll("#form2 input").forEach((item) => {
+        item.value = "";
+      });
+    });
+    form3.addEventListener("submit", (event) => {
+      statusMessage.style.cssText = "font-size: 2rem; color: #fff;";
+      event.preventDefault();
+      form3.append(statusMessage);
+      statusMessage.textContent = loadMessage;
+      const formData = new FormData(form3); // для записи нужен обязательно атрибут name - он будет являться ключем
+      g(formData);
+      document.querySelectorAll("#form3 input").forEach((item) => {
+        item.value = "";
+      });
+    });
+  };
+  const postData = (body, outputData, errorData) => {
+    const request = new XMLHttpRequest();
+    request.addEventListener("readystatechange", () => {
+      if (request.readyState !== 4) {
+        return;
+      }
+      if (request.status === 200) {
+        outputData();
+      } else {
+        errorData(request.status);
+      }
+    });
+    request.open("POST", "server.php");
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(body));
+  };
+
+  sendForm();
 });
