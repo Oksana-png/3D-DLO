@@ -352,9 +352,6 @@ window.addEventListener("DOMContentLoaded", () => {
       inputEmail = document.querySelectorAll('input[type="email"]'),
       allInput = document.querySelectorAll("input");
     const regNumder = /[^0-9]/g,
-      regText = /[^а-я\s]/gi,
-      regEmail = /[^@\-_\!\*\'~\.a-z]/gi,
-      regPhone = /[^0-9\(\)-]/g,
       regStart = /^-|-$/g,
       regSpace = /\s{2,}/,
       regDef = /-{2,}/g;
@@ -494,17 +491,15 @@ window.addEventListener("DOMContentLoaded", () => {
       data.forEach((val, i) => {
         body[i] = val;
       });
-      postData(
-        body,
-        () => {
+      postData(body)
+        .then(() => {
           document.querySelector(".overlay-loader").remove();
           form.append(successMessage);
-        },
-        (error) => {
+        })
+        .catch((error) => {
           console.error(error);
           document.querySelector(".overlay-loader").remove();
-        }
-      );
+        });
     };
 
     form.addEventListener("submit", (event) => {
@@ -571,22 +566,23 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   };
-  const postData = (body, outputData, errorData) => {
-    const request = new XMLHttpRequest();
-    request.addEventListener("readystatechange", () => {
-      if (request.readyState !== 4) {
-        return;
-      }
-      if (request.status === 200) {
-        outputData();
-      } else {
-        errorData(request.status);
-      }
+  const postData = (body) =>
+    new Promise((resolve, reject) => {
+      const request = new XMLHttpRequest();
+      request.open("POST", "server.php");
+      request.addEventListener("readystatechange", () => {
+        if (request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200) {
+          resolve();
+        } else {
+          reject(request.status);
+        }
+      });
+      request.setRequestHeader("Content-Type", "application/json");
+      request.send(JSON.stringify(body));
     });
-    request.open("POST", "server.php");
-    request.setRequestHeader("Content-Type", "application/json");
-    request.send(JSON.stringify(body));
-  };
 
   sendForm();
 });
