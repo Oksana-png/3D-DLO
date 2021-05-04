@@ -232,9 +232,8 @@ window.addEventListener("DOMContentLoaded", () => {
       while (i < slide.length) {
         const dot = document.createElement("li");
         dot.classList.add("dot");
-
         if (i === 0) {
-          dot.classList.add(".dot-active");
+          dot.classList.add("dot-active");
         }
         portfolioDots.append(dot);
         i++;
@@ -347,10 +346,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const regular = () => {
     const calcInputs = document.querySelectorAll("input.calc-item"),
-      footerFormTop = document.querySelectorAll(".top-form"),
       inputMessage = document.getElementById("form2-message"),
       inputTel = document.querySelectorAll('input[type="tel"]'),
-      inputName = document.querySelectorAll('input[name="user_name"]');
+      inputName = document.querySelectorAll('input[name="user_name"]'),
+      inputEmail = document.querySelectorAll('input[type="email"]'),
+      allInput = document.querySelectorAll("input");
     const regNumder = /[^0-9]/g,
       regText = /[^а-я\s]/gi,
       regEmail = /[^@\-_\!\*\'~\.a-z]/gi,
@@ -358,23 +358,41 @@ window.addEventListener("DOMContentLoaded", () => {
       regStart = /^-|-$/g,
       regSpace = /\s{2,}/,
       regDef = /-{2,}/g;
-
     inputTel.forEach((item) => {
       item.addEventListener("input", () => {
         item.value = item.value.replace(/[^0-9\+]/gi, "");
       });
     });
-    inputName.forEach((item) => {
+    inputEmail.forEach((item) => {
       item.addEventListener("blur", () => {
-        item.value = item.value.replace(/[^а-я ]/i, "");
+        // item.value = item.value.replace(/^\w+@\w+\.\w{2,3}$/, "");
       });
       item.addEventListener("input", () => {
-        item.value = item.value.replace(/[^а-я ]/i, "");
+        if (/^\w+@\w+\.\w{2,3}$/.test(item)) {
+          item.setCustomValidity("email@email.ru");
+        }
       });
+    });
+    inputName.forEach((item) => {
+      item.addEventListener("blur", () => {
+        item.value = item.value.replace(/[^а-я -]{2,50}/gi, "");
+      });
+      item.addEventListener("input", () => {
+        item.value = item.value.replace(/[^а-я -]{2,50}/i, "");
+      });
+      item.value = item.value.replace(/[^.]/gi, (match) => match.toLowerCase());
+      item.value = item.value.replace(/^.{1}/, (match) => match.toUpperCase());
     });
     calcInputs.forEach((item) => {
       item.addEventListener("blur", () => {
         item.value = item.value.replace(regNumder, "");
+      });
+    });
+    allInput.forEach((item) => {
+      item.addEventListener("blur", () => {
+        item.value = item.value.replace(regSpace, " ");
+        item.value = item.value.replace(regDef, "-");
+        item.value = item.value.trim();
       });
     });
 
@@ -389,33 +407,6 @@ window.addEventListener("DOMContentLoaded", () => {
         /[^0-9а-я \.,:\?\!;-]/gi,
         ""
       );
-    });
-
-    footerFormTop.forEach((item) => {
-      item.addEventListener("blur", (event) => {
-        const target = event.target;
-        if (target.closest("#form2-name")) {
-          target.value = target.value.replace(regText, "");
-          target.value = target.value.replace(regSpace, " ");
-          target.value = target.value.trim();
-          target.value = target.value.replace(/[^.]/gi, (match) =>
-            match.toLowerCase()
-          );
-          target.value = target.value.replace(/^.{1}/, (match) =>
-            match.toUpperCase()
-          );
-        } else if (target.closest("#form2-email")) {
-          target.value = target.value.replace(regEmail, "");
-          target.value = target.value.replace(regDef, "-");
-          target.value = target.value.trim();
-          target.value = target.value.replace(regStart, "");
-        } else if (target.closest("#form2-phone")) {
-          target.value = target.value.replace(regPhone, "");
-          target.value = target.value.replace(regDef, "-");
-          target.value = target.value.trim();
-          target.value = target.value.replace(regStart, "");
-        }
-      });
     });
   };
   regular();
@@ -518,30 +509,66 @@ window.addEventListener("DOMContentLoaded", () => {
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      form.append(loader);
-      const formData = new FormData(form); // для записи нужен обязательно атрибут name - он будет являться ключем
-      g(formData, form);
-      document.querySelectorAll("#form1 input").forEach((item) => {
-        item.value = "";
-      });
+      const email = form.querySelector('input[type="email"]'),
+        tel = form.querySelector('input[type="tel"]'),
+        name = form.querySelector('input[name="user_name"]');
+      if (
+        /^\w+@\w+\.\w{2,3}$/.test(email.value) &&
+        /(^\+[\d]{11,})|(^[\d]{11,})/.test(tel.value) &&
+        /[а-я -]{2,50}/i.test(name.value)
+      ) {
+        form.append(loader);
+        const formData = new FormData(form); // для записи нужен обязательно атрибут name - он будет являться ключем
+        g(formData, form);
+        document.querySelectorAll("#form1 input").forEach((item) => {
+          item.value = "";
+        });
+      } else {
+        alert("Введите валидные данные!");
+        return;
+      }
     });
     form2.addEventListener("submit", (event) => {
       event.preventDefault();
-      document.querySelector(".connect").after(loader);
-      const formData = new FormData(form2); // для записи нужен обязательно атрибут name - он будет являться ключем
-      g(formData, form2);
-      document.querySelectorAll("#form2 input").forEach((item) => {
-        item.value = "";
-      });
+      const email = form2.querySelector('input[type="email"]'),
+        tel = form2.querySelector('input[type="tel"]'),
+        name = form2.querySelector('input[name="user_name"]');
+      if (
+        /^\w+@\w+\.\w{2,3}$/.test(email.value) &&
+        /(^\+[\d]{11,})|(^[\d]{11,})/.test(tel.value) &&
+        /[а-я -]{2,50}/i.test(name.value)
+      ) {
+        document.querySelector(".connect").after(loader);
+        const formData = new FormData(form2); // для записи нужен обязательно атрибут name - он будет являться ключем
+        g(formData, form2);
+        document.querySelectorAll("#form2 input").forEach((item) => {
+          item.value = "";
+        });
+      } else {
+        alert("Введите валидные данные!");
+        return;
+      }
     });
     form3.addEventListener("submit", (event) => {
       event.preventDefault();
-      form3.append(loader);
-      const formData = new FormData(form3); // для записи нужен обязательно атрибут name - он будет являться ключем
-      g(formData, form3);
-      document.querySelectorAll("#form3 input").forEach((item) => {
-        item.value = "";
-      });
+      const email = form3.querySelector('input[type="email"]'),
+        tel = form3.querySelector('input[type="tel"]'),
+        name = form3.querySelector('input[name="user_name"]');
+      if (
+        /^\w+@\w+\.\w{2,3}$/.test(email.value) &&
+        /(^\+[\d]{11,})|(^[\d]{11,})/.test(tel.value) &&
+        /[а-я -]{2,50}/i.test(name.value)
+      ) {
+        form3.append(loader);
+        const formData = new FormData(form3); // для записи нужен обязательно атрибут name - он будет являться ключем
+        g(formData, form3);
+        document.querySelectorAll("#form3 input").forEach((item) => {
+          item.value = "";
+        });
+      } else {
+        alert("Введите валидные данные!");
+        return;
+      }
     });
   };
   const postData = (body, outputData, errorData) => {
