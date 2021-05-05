@@ -486,13 +486,25 @@ window.addEventListener("DOMContentLoaded", () => {
         <div class="colu col_8"></div>
       </div>
     `;
+    const postData = (body) =>
+      fetch("server.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
     const g = (data, form) => {
       const body = {};
       data.forEach((val, i) => {
         body[i] = val;
       });
       postData(body)
-        .then(() => {
+        .then((responce) => {
+          console.log(responce);
+          if (responce.status !== 200) {
+            throw new Error("status network not 200");
+          }
           document.querySelector(".overlay-loader").remove();
           form.append(successMessage);
         })
@@ -566,23 +578,6 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   };
-  const postData = (body) =>
-    new Promise((resolve, reject) => {
-      const request = new XMLHttpRequest();
-      request.open("POST", "server.php");
-      request.addEventListener("readystatechange", () => {
-        if (request.readyState !== 4) {
-          return;
-        }
-        if (request.status === 200) {
-          resolve();
-        } else {
-          reject(request.status);
-        }
-      });
-      request.setRequestHeader("Content-Type", "application/json");
-      request.send(JSON.stringify(body));
-    });
 
   sendForm();
 });
