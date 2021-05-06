@@ -42,6 +42,12 @@ const sendForm = () => {
         }
         document.querySelector(".overlay-loader").remove();
         form.append(successMessage);
+        setTimeout(() => {
+          if (form.querySelector(".success-modal")) {
+            const messageDelete = form.querySelector(".success-modal");
+            messageDelete.remove();
+          }
+        }, 3000);
       })
       .catch((error) => {
         console.error(error);
@@ -104,6 +110,11 @@ const sendForm = () => {
       form3.append(loader);
       const formData = new FormData(form3); // для записи нужен обязательно атрибут name - он будет являться ключем
       g(formData, form3);
+      setTimeout(() => {
+        document.querySelector(".popup").style.display = "none";
+        const messageDelete = form3.querySelector(".success-modal");
+        messageDelete.remove();
+      }, 6000);
       document.querySelectorAll("#form3 input").forEach((item) => {
         item.value = "";
       });

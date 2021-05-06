@@ -64,7 +64,7 @@ const toggleMenu = () => {
     }
     // клик мимо меню (закрытие)
     if (menu.style.transform === "translate(0%)") {
-      if (target.tagName !== "MENU") {
+      if (target.tagName !== "MENU" && target.tagName !== "LI") {
         close();
       }
     }

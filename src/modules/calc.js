@@ -27,9 +27,14 @@ const calc = (price = 100) => {
       );
       let i = 1;
       const timerId = setInterval(() => {
+        if (!calcSquare.value && !calcType.value) {
+          totalValue.textContent = 0;
+          clearInterval(timerId);
+          return;
+        }
         totalValue.textContent = i;
         if (i < total) {
-          i += 5;
+          i += 50;
         } else {
           totalValue.textContent = total;
           clearInterval(timerId);

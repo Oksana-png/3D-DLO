@@ -12,7 +12,7 @@ import calc from "./modules/calc";
 import sendForm from "./modules/sendForm";
 
 // таймер
-countTimer("29 april 2021");
+countTimer("8 may 2021");
 // открытие и закрытию меню
 toggleMenu();
 // POPUP окно
