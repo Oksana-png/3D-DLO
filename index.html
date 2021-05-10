@@ -44,7 +44,14 @@
               </div>
             </div>
             <div
-              class="col-md-4 col-md-offset-6 col-sm-4 col-sm-offset-2 col-5 col-offset-0"
+              class="
+                col-md-4
+                col-md-offset-6
+                col-sm-4
+                col-sm-offset-2
+                col-5
+                col-offset-0
+              "
             >
               <div class="media phone-media">
                 <div class="media-left media-middle">
@@ -124,17 +131,19 @@
       </form>
       <small>*Мы гарантируем конфидициальность передаваемых данных</small>
       <br />
-      <a href="#service-block"><img src="images/scroll.svg" alt="" /></a>
+      <a href="#service-block" class="scroll"
+        ><img src="images/scroll.svg" alt=""
+      /></a>
     </main>
 
     <menu>
       <a class="close-btn" href="#close">&times;</a>
       <ul>
-        <li><a href="#service-block">Наши услуги</a></li>
-        <li><a href="#portfolio">Портфолио</a></li>
-        <li><a href="#calc">Калькулятор стоимости</a></li>
-        <li><a href="#command">Наша команда</a></li>
-        <li><a href="#connect">Остались вопросы?</a></li>
+        <li><a class="scroll" href="#service-block">Наши услуги</a></li>
+        <li><a class="scroll" href="#portfolio">Портфолио</a></li>
+        <li><a class="scroll" href="#calc">Калькулятор стоимости</a></li>
+        <li><a class="scroll" href="#command">Наша команда</a></li>
+        <li><a class="scroll" href="#connect">Остались вопросы?</a></li>
       </ul>
     </menu>
 
@@ -172,7 +181,7 @@
           </div>
         </div>
 
-        <div class="service-tab row">
+        <div class="service-tab row d-none">
           <div class="col-md-6 col-sm-6">
             <img src="images/service/service-2.png" alt="" />
           </div>
@@ -188,7 +197,7 @@
           </div>
         </div>
 
-        <div class="service-tab row">
+        <div class="service-tab row d-none">
           <div class="service-outer col-md-6 col-sm-6 col-12">
             <div class="service-inner">
               <p>
@@ -210,34 +219,29 @@
         <h2>Портфолио</h2>
         <div class="underline"></div>
         <ul class="portfolio-content" id="all-progects">
-          <li class="portfolio-item portfolio-item-active">
-            <img src="images/portfilio/portfolio-01.jpg" alt="portfolio" />
-          </li>
-          <li class="portfolio-item">
-            <img src="images/portfilio/portfolio-04.jpg" alt="portfolio" />
-          </li>
-          <li class="portfolio-item">
-            <img src="images/portfilio/portfolio-06.jpg" alt="portfolio" />
-          </li>
-          <li class="portfolio-item">
-            <img src="images/portfilio/portfolio-07.jpg" alt="portfolio" />
-          </li>
-          <li class="portfolio-item">
-            <img src="images/portfilio/portfolio-08.jpg" alt="portfolio" />
-          </li>
-          <li class="portfolio-item">
-            <img src="images/portfilio/portfolio-10.jpg" alt="portfolio" />
-          </li>
-          <a href="#" class="portfolio-btn prev" id="arrow-left"></a>
-          <a href="#" class="portfolio-btn next" id="arrow-right"></a>
-          <ul class="portfolio-dots">
-            <li class="dot dot-active"></li>
-            <li class="dot"></li>
-            <li class="dot"></li>
-            <li class="dot"></li>
-            <li class="dot"></li>
-            <li class="dot"></li>
-          </ul>
+          <div class="wrapper-slides">
+            <li class="portfolio-item portfolio-item-active">
+              <img src="images/portfilio/portfolio-01.jpg" alt="portfolio" />
+            </li>
+            <li class="portfolio-item">
+              <img src="images/portfilio/portfolio-04.jpg" alt="portfolio" />
+            </li>
+            <li class="portfolio-item">
+              <img src="images/portfilio/portfolio-06.jpg" alt="portfolio" />
+            </li>
+            <li class="portfolio-item">
+              <img src="images/portfilio/portfolio-07.jpg" alt="portfolio" />
+            </li>
+            <li class="portfolio-item">
+              <img src="images/portfilio/portfolio-08.jpg" alt="portfolio" />
+            </li>
+            <li class="portfolio-item">
+              <img src="images/portfilio/portfolio-10.jpg" alt="portfolio" />
+            </li>
+          </div>
+          <button class="portfolio-btn prev" id="arrow-left"></button>
+          <button class="portfolio-btn next" id="arrow-right"></button>
+          <ul class="portfolio-dots"></ul>
         </ul>
       </div>
     </div>
@@ -517,7 +521,14 @@
             <a href="#">Договор публичной оферты</a><br />
           </div>
           <div
-            class="col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-0 col-12 col-offset-0"
+            class="
+              col-md-3
+              col-md-offset-2
+              col-sm-3
+              col-sm-offset-0
+              col-12
+              col-offset-0
+            "
           >
             <p>Мы в социальных сетях:</p>
             <a href=""><img src="images/footer/face.svg" alt="" /></a>
@@ -579,5 +590,32 @@
     </div>
 
     <script src="script/script.js"></script>
+    <script src="script/sliderCarousel.js"></script>
+    <script defer>
+      const options = {
+        main: ".portfolio-content",
+        wrap: ".wrapper-slides",
+        next: "#arrow-right",
+        prev: "#arrow-left",
+        slides: ".portfolio-item",
+        slidesToShow: 1,
+        responsive: [
+          {
+            breakpoint: 1024,
+            slideToShow: 3,
+          },
+          {
+            breakpoint: 1024,
+            slideToShow: 3,
+          },
+          {
+            breakpoint: 1024,
+            slideToShow: 3,
+          },
+        ],
+      };
+      const corousel = new SliderCarousel(options);
+      corousel.init();
+    </script>
   </body>
 </html>
